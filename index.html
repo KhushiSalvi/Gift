@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>🎂 Happy Birthday Monu 🎉</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+ body{
+  height:100vh;
+  background:
+  linear-gradient(rgba(255, 192, 203, 0.3), rgba(255, 192, 203, 0.3)), /* soft pink tint */
+  url('fe68644c-7017-4883-8fbc-cbcf8e57d9ef.png') center center / contain no-repeat fixed;
+background-color: #ffccdd; /* light rosy background behind */
+
+  background-color: #fff0f5; /* soft pink behind image */
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  font-family:'Poppins',sans-serif;
+}
+
+  #overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(255,255,255,0.6);
+    z-index:0;
+  }
+  #content{z-index:1;display:flex;flex-direction:column;align-items:center;}
+
+  #instruction{
+    color:#ff4d79;font-size:1.4em;margin-bottom:20px;
+    animation:pulse 1.5s infinite alternate;
+    text-align:center;
+  }
+  @keyframes pulse{from{opacity:.6;}to{opacity:1;transform:scale(1.05);}}
+
+  #gift{
+    width:140px;height:140px;background:#ff4d79;
+    position:relative;border-radius:10px;cursor:pointer;
+    box-shadow:0 6px 0 #d93f66;animation:bounce 1.5s infinite;
+  }
+  #gift::before{
+    content:"";position:absolute;width:30px;height:140px;
+    background:#fff;left:55px;top:0;border-radius:10px;
+  }
+  #ribbon{
+    position:absolute;top:-25px;left:30px;width:80px;height:50px;
+    background:#ff4d79;border-radius:50% 50% 0 0;
+    transform:rotate(45deg);box-shadow:0 6px 0 #d93f66;
+  }
+  @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+
+  .cake{
+    position:relative;width:220px;height:130px;
+    background:#ffb3d9;border-radius:0 0 20px 20px;
+    box-shadow:0 8px 0 #ff80bf;opacity:0;transform:scale(0);
+    transition:all 1s ease;
+  }
+  .icing{
+    position:absolute;top:-40px;width:100%;height:50px;
+    background:#fff0f5;border-radius:20px 20px 0 0;
+    box-shadow:inset 0 -5px #ffd6e8;
+  }
+  .candle{
+    position:absolute;top:-80px;left:100px;width:20px;height:60px;
+    background:repeating-linear-gradient(45deg,#fff,#fff 5px,#ff66b3 5px,#ff66b3 10px);
+    border-radius:5px;opacity:0;transition:opacity .5s ease;
+  }
+  .flame{
+    position:absolute;top:-25px;left:6px;width:8px;height:20px;
+    background:radial-gradient(circle,#ffeb3b 40%,#ff9800 80%);
+    border-radius:50%;box-shadow:0 0 20px 10px rgba(255,193,7,.6);
+    animation:flicker .1s infinite alternate;display:none;
+  }
+  @keyframes flicker{from{transform:scale(1);opacity:1;}to{transform:scale(1.1);opacity:.9;}}
+  h1,h2{
+    color:#ff4d79;text-shadow:0 0 10px #fff;
+    opacity:0;transform:scale(.8);transition:all 1s ease;text-align:center;
+  }
+  h1{font-size:3em;margin-top:40px;}
+  h2{font-size:1.5em;margin-top:10px;}
+  #smile{
+    font-size:3em;margin-top:15px;opacity:0;transition:opacity 1s ease;
+  }
+
+  .confetti,.spark{
+    position:absolute;top:0;width:10px;height:10px;
+    background:gold;opacity:.8;animation:fall linear infinite;z-index:10;
+  }
+  @keyframes fall{
+    0%{transform:translateY(-10px) rotate(0);opacity:1;}
+    100%{transform:translateY(100vh) rotate(360deg);opacity:0;}
+  }
+  .spark{
+    width:6px;height:6px;border-radius:50%;
+    background:gold;animation:burst 0.8s ease-out forwards;
+  }
+  @keyframes burst{
+    0%{transform:scale(0);}
+    100%{transform:translate(var(--x),var(--y)) scale(1);opacity:0;}
+  }
+</style>
+</head>
+<body>
+  <div id="overlay"></div>
+  <div id="content">
+    <div id="instruction">🎁 Click on the box to open your cake!</div>
+    <div id="gift"><div id="ribbon"></div></div>
+
+    <div class="cake" id="cake">
+      <div class="icing"></div>
+      <div class="candle" id="candle"><div class="flame"></div></div>
+    </div>
+
+    <h1 id="msg1">🎉 Happy Birthday, Monu! 🎂</h1>
+    <h2 id="msg2">You completed your 21 years with me hiiiii 😄🎈</h2>
+    <div id="smile">😊</div>
+  </div>
+
+  <audio id="song">
+    <source src="https://www2.cs.uic.edu/~i101/SoundFiles/HappyBirthdaySong.mp3" type="audio/mpeg">
+  </audio>
+
+<script>
+const gift=document.getElementById('gift');
+const cake=document.getElementById('cake');
+const msg1=document.getElementById('msg1');
+const msg2=document.getElementById('msg2');
+const smile=document.getElementById('smile');
+const candle=document.getElementById('candle');
+const flame=document.querySelector('.flame');
+const song=document.getElementById('song');
+const instruction=document.getElementById('instruction');
+
+function makeConfetti(){
+  for(let i=0;i<70;i++){
+    const conf=document.createElement("div");
+    conf.classList.add("confetti");
+    document.body.appendChild(conf);
+    conf.style.left=Math.random()*100+"vw";
+    conf.style.background=`hsl(${Math.random()*360},80%,60%)`;
+    conf.style.animationDuration=Math.random()*3+2+"s";
+    conf.style.animationDelay=Math.random()*2+"s";
+    setTimeout(()=>conf.remove(),5000);
+  }
+}
+
+function fireworks(){
+  for(let side of [-1,1]){
+    for(let i=0;i<25;i++){
+      const s=document.createElement('div');
+      s.classList.add('spark');
+      document.body.appendChild(s);
+      const angle=Math.random()*Math.PI;
+      const dist=80+Math.random()*60;
+      const x=side*dist*Math.cos(angle)+"px";
+      const y=-dist*Math.sin(angle)+"px";
+      s.style.setProperty('--x',x);
+      s.style.setProperty('--y',y);
+      s.style.left=side>0?'70%':'30%';
+      s.style.top='60%';
+      setTimeout(()=>s.remove(),800);
+    }
+  }
+}
+
+gift.addEventListener('click',()=>{
+  instruction.style.display='none';
+  gift.style.display='none';
+  makeConfetti();
+  setTimeout(()=>{cake.style.opacity=1;cake.style.transform='scale(1)';song.play();},400);
+  setTimeout(()=>{candle.style.opacity=1;flame.style.display='block';},1500);
+  setTimeout(()=>{msg1.style.opacity=1;msg1.style.transform='scale(1)';},2500);
+  setTimeout(()=>{msg2.style.opacity=1;msg2.style.transform='scale(1)';},4000);
+  setTimeout(()=>{smile.style.opacity=1;},5500);
+  setTimeout(()=>{fireworks();makeConfetti();},6000);
+});
+</script>
+</body>
+</html>
